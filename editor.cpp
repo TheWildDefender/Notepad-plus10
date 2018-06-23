@@ -4,7 +4,7 @@
 IMPLEMENT_APP(EditorApp)
 
 bool EditorApp::OnInit() {
-	EditorFrame *EditorWindow = new EditorFrame (_("Notepad++++++++++ - untitled"), wxDefaultPosition, wxSize(800, 600));
+	EditorFrame *EditorWindow = new EditorFrame (_("Notepad++++++++++ - untitled"), wxDefaultPosition, wxSize(1000, 500));
 	EditorWindow->Show(true);
 	SetTopWindow(EditorWindow);
 	return true;
@@ -53,7 +53,8 @@ void EditorFrame::Save(wxCommandEvent& event) {
 }
 
 void EditorFrame::SaveAs(wxCommandEvent& event) {
-	if (SaveFileDialog->ShowModal() == wxID_OK) {
+	int dialog_input = SaveFileDialog->ShowModal();
+	if (dialog_input == wxID_OK) {
 		opened_file_path = SaveFileDialog->GetPath();
 		opened_file_name = SaveFileDialog->GetFilename();
 		TextBox->SaveFile(opened_file_path);
@@ -83,7 +84,8 @@ bool EditorFrame::ConfirmExit() {
 		switch (ConfirmExitDialog->ShowModal()) {
 			case wxID_YES:
 				SaveAs(null_event);
-				return true;
+				if (dialog_input == wxID_OK) return true;
+				else return false;
 				break;
 			case wxID_NO:
 				return true;

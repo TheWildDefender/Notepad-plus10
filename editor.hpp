@@ -36,6 +36,7 @@ enum {
 
 bool saved = true;
 bool close_app;
+int dialog_input;
 wxString opened_file_name ("untitled");
 wxString opened_file_path;
 wxCommandEvent null_event (wxEVT_NULL);
