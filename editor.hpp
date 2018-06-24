@@ -13,6 +13,12 @@ class EditorFrame: public wxFrame {
 		wxFileDialog *SaveFileDialog;
 		wxFileDialog *OpenFileDialog;
 
+		wxMenuItem *ExitMenuItem;
+		wxMenuItem *SaveMenuItem;
+		wxMenuItem *SaveAsMenuItem;
+		wxMenuItem *OpenMenuItem;
+		wxMenuItem *ClearMenuItem;
+
 		void Exit(wxCommandEvent& event);
 		void Exit(wxCloseEvent& event);
 		void Save(wxCommandEvent& event);
@@ -27,11 +33,11 @@ class EditorFrame: public wxFrame {
 
 enum {
 	TEXTCTRL_Main = wxID_HIGHEST + 1,
-	FILEMENU_Exit,
-	FILEMENU_Save,
-	FILEMENU_SaveAs,
-	FILEMENU_Open,
-	FILEMENU_Clear
+	MENUITEM_Exit,
+	MENUITEM_Save,
+	MENUITEM_SaveAs,
+	MENUITEM_Open,
+	MENUITEM_Clear
 };
 
 bool saved = true;
