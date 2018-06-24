@@ -28,11 +28,11 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 	OpenFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	SaveFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
-	ExitMenuItem = new wxMenuItem (FileMenu, MENUITEM_Exit, _("Exit"), wxEmptyString);
-	SaveMenuItem = new wxMenuItem (FileMenu, MENUITEM_Save, _("Save"), wxEmptyString);
+	ExitMenuItem = new wxMenuItem (FileMenu, MENUITEM_Exit, _("Exit\tCtrl-Q"), wxEmptyString);
+	SaveMenuItem = new wxMenuItem (FileMenu, MENUITEM_Save, _("Save\tCtrl-S"), wxEmptyString);
 	SaveAsMenuItem = new wxMenuItem (FileMenu, MENUITEM_SaveAs, _("Save As"), wxEmptyString);
-	OpenMenuItem = new wxMenuItem (FileMenu, MENUITEM_Open, _("Open"), wxEmptyString);
-	ClearMenuItem = new wxMenuItem (FileMenu, MENUITEM_Clear, _("Clear"), wxEmptyString);
+	OpenMenuItem = new wxMenuItem (FileMenu, MENUITEM_Open, _("Open\tCtrl-O"), wxEmptyString);
+	ClearMenuItem = new wxMenuItem (FileMenu, MENUITEM_Clear, _("Clear\tCtrl-Del"), wxEmptyString);
 
 	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.xpm", wxBITMAP_TYPE_XPM));
 	SaveMenuItem->SetBitmap(wxBitmap ("icons/filesave.xpm", wxBITMAP_TYPE_XPM));
