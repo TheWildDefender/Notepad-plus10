@@ -3,14 +3,14 @@
 
 IMPLEMENT_APP(EditorApp)
 
-bool EditorApp::OnInit() {
+bool EditorApp::OnInit() { //create window
 	EditorFrame *EditorWindow = new EditorFrame (_("Notepad++++++++++ - untitled"), wxDefaultPosition, wxSize(1000, 500));
 	EditorWindow->Show(true);
 	SetTopWindow(EditorWindow);
 	return true;
 }
 
-BEGIN_EVENT_TABLE(EditorFrame, wxFrame)
+BEGIN_EVENT_TABLE(EditorFrame, wxFrame) //event handlers
 	EVT_MENU(MENUITEM_Exit, EditorFrame::Exit)
 	EVT_MENU(MENUITEM_Save, EditorFrame::Save)
 	EVT_MENU(MENUITEM_SaveAs, EditorFrame::SaveAs)
@@ -20,26 +20,29 @@ BEGIN_EVENT_TABLE(EditorFrame, wxFrame)
 	EVT_CLOSE(EditorFrame::Exit)
 END_EVENT_TABLE()
 
-EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame (NULL, -1, title, pos, size) {
+EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame (NULL, -1, title, pos, size) { //initialize components
 	TextBox = new wxTextCtrl (this, TEXTCTRL_Main, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_RICH);
 	MenuBar = new wxMenuBar ();
 	wxMenu *FileMenu = new wxMenu ();
 	ConfirmExitDialog = new wxMessageDialog (this, _("Do you want to save your unsaved changes?"), _("Unsaved Changes"), wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxCENTRE);
-	OpenFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	OpenFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWi/*is this a bug, or an easter egg?*/ldcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	SaveFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
+	//initialize menu items
 	ExitMenuItem = new wxMenuItem (FileMenu, MENUITEM_Exit, _("Exit\tCtrl-Q"), wxEmptyString);
 	SaveMenuItem = new wxMenuItem (FileMenu, MENUITEM_Save, _("Save\tCtrl-S"), wxEmptyString);
 	SaveAsMenuItem = new wxMenuItem (FileMenu, MENUITEM_SaveAs, _("Save As"), wxEmptyString);
 	OpenMenuItem = new wxMenuItem (FileMenu, MENUITEM_Open, _("Open\tCtrl-O"), wxEmptyString);
 	ClearMenuItem = new wxMenuItem (FileMenu, MENUITEM_Clear, _("Clear\tCtrl-Del"), wxEmptyString);
 
+	//set icons for menu items
 	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.xpm", wxBITMAP_TYPE_XPM));
 	SaveMenuItem->SetBitmap(wxBitmap ("icons/filesave.xpm", wxBITMAP_TYPE_XPM));
 	SaveAsMenuItem->SetBitmap(wxBitmap ("icons/filesaveas.xpm", wxBITMAP_TYPE_XPM));
 	OpenMenuItem->SetBitmap(wxBitmap ("icons/fileopen.xpm", wxBITMAP_TYPE_XPM));
 	ClearMenuItem->SetBitmap(wxBitmap ("icons/delete.xpm", wxBITMAP_TYPE_XPM));
 
+	//add menu items to menu
 	FileMenu->Append(ExitMenuItem);
 	FileMenu->Append(SaveMenuItem);
 	FileMenu->Append(SaveAsMenuItem);
@@ -50,11 +53,11 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 	SetMenuBar(MenuBar);
 }
 
-void EditorFrame::Exit(wxCommandEvent& event) {
+void EditorFrame::Exit(wxCommandEvent& event) { //exit function for exit menu item
 	if (ConfirmExit() == true) Destroy();
 }
 
-void EditorFrame::Exit(wxCloseEvent& event) {
+void EditorFrame::Exit(wxCloseEvent& event) { //exit function for window close events
 	if (ConfirmExit() == true) Destroy();
 }
 
@@ -65,7 +68,7 @@ void EditorFrame::Save(wxCommandEvent& event) {
 }
 
 void EditorFrame::SaveAs(wxCommandEvent& event) {
-	int dialog_input = SaveFileDialog->ShowModal();
+	dialog_input = SaveFileDialog->ShowModal(); //event handlers must be of type void :-(
 	if (dialog_input == wxID_OK) {
 		opened_file_path = SaveFileDialog->GetPath();
 		opened_file_name = SaveFileDialog->GetFilename();
@@ -92,7 +95,7 @@ void EditorFrame::ChangeToUnsaved(wxCommandEvent& event) {
 	saved = false;
 }
 
-bool EditorFrame::ConfirmExit() {
+bool EditorFrame::ConfirmExit() { //returns true if user wants to exit, and returns false if user wants to stay
 	if (saved == false) {
 		switch (ConfirmExitDialog->ShowModal()) {
 			case wxID_YES:

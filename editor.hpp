@@ -26,12 +26,12 @@ class EditorFrame: public wxFrame {
 		void Open(wxCommandEvent& event);
 		void Clear(wxCommandEvent& event);
 		void ChangeToUnsaved(wxCommandEvent& event);
-		bool ConfirmExit();
+		bool ConfirmExit(); //ConfirmExit() says "BOOL" in the field of voids				get it... "boo"... "bool"... *runs away*
 
 		DECLARE_EVENT_TABLE();
 };
 
-enum {
+enum { //ids for components
 	TEXTCTRL_Main = wxID_HIGHEST + 1,
 	MENUITEM_Exit,
 	MENUITEM_Save,
@@ -40,11 +40,11 @@ enum {
 	MENUITEM_Clear
 };
 
-bool saved = true;
-bool close_app;
-int dialog_input;
-wxString opened_file_name ("untitled");
-wxString opened_file_path;
-wxCommandEvent null_event (wxEVT_NULL);
+bool saved = true; //states whether the user has unsaved changes or not
+bool close_app; //used in confirming exit; states whether editor should close or not
+int dialog_input; //stores what button the user clicked in save file dialog
+wxString opened_file_name ("untitled"); //stores name of file that is being edited
+wxString opened_file_path; //stores path of file that is being edited
+wxCommandEvent null_event (wxEVT_NULL); //when you have to pass an argument but you have no argument
 
 DECLARE_APP(EditorApp)
