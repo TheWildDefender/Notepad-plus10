@@ -25,7 +25,7 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 	MenuBar = new wxMenuBar ();
 	wxMenu *FileMenu = new wxMenu ();
 	ConfirmExitDialog = new wxMessageDialog (this, _("Do you want to save your unsaved changes?"), _("Unsaved Changes"), wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxCENTRE);
-	OpenFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWi/*is this a bug, or an easter egg?*/ldcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	OpenFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	SaveFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 	//initialize menu items
