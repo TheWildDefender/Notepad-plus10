@@ -7,17 +7,33 @@ class EditorFrame: public wxFrame {
 	public:
 		EditorFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
+		class AboutDialogClass: public wxDialog {
+			public:
+				AboutDialogClass(const wxString& title, const wxSize& size);
+				void OnAboutLink(wxHyperlinkEvent& event);
+
+				DECLARE_EVENT_TABLE()
+		};
+
 		wxTextCtrl *TextBox;
 		wxMenuBar *MenuBar;
+		wxMenu *FileMenu;
+
 		wxMessageDialog *ConfirmExitDialog;
 		wxFileDialog *SaveFileDialog;
 		wxFileDialog *OpenFileDialog;
+		AboutDialogClass *AboutDialog;
+
+		wxBoxSizer *AboutDialogSizer;
+		wxStaticText *AboutText;
+		wxHyperlinkCtrl *AboutLink;
 
 		wxMenuItem *ExitMenuItem;
 		wxMenuItem *SaveMenuItem;
 		wxMenuItem *SaveAsMenuItem;
 		wxMenuItem *OpenMenuItem;
 		wxMenuItem *ClearMenuItem;
+		wxMenuItem *AboutMenuItem;
 
 		void Exit(wxCommandEvent& event);
 		void Exit(wxCloseEvent& event);
@@ -26,9 +42,10 @@ class EditorFrame: public wxFrame {
 		void Open(wxCommandEvent& event);
 		void Clear(wxCommandEvent& event);
 		void ChangeToUnsaved(wxCommandEvent& event);
+		void About(wxCommandEvent& event);
 		bool ConfirmExit(); //ConfirmExit() says "BOOL" in the field of voids				get it... "boo"... "bool"... *runs away*
 
-		DECLARE_EVENT_TABLE();
+		DECLARE_EVENT_TABLE()
 };
 
 enum { //ids for components
@@ -37,9 +54,12 @@ enum { //ids for components
 	MENUITEM_Save,
 	MENUITEM_SaveAs,
 	MENUITEM_Open,
-	MENUITEM_Clear
+	MENUITEM_Clear,
+	MENUITEM_About,
+	HYPERLINK_About
 };
 
+EditorFrame *EditorWindow;
 bool saved = true; //states whether the user has unsaved changes or not
 bool close_app; //used in confirming exit; states whether editor should close or not
 int dialog_input; //stores what button the user clicked in save file dialog

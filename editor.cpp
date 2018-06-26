@@ -1,39 +1,54 @@
 #include <wx/wx.h>
+#include <wx/hyperlink.h>
+#include <random>
+#include <chrono>
 #include "editor.hpp"
 
 IMPLEMENT_APP(EditorApp)
 
 bool EditorApp::OnInit() { //create window
-	EditorFrame *EditorWindow = new EditorFrame (_("Notepad++++++++++ - untitled"), wxDefaultPosition, wxSize(1000, 500));
+	EditorWindow = new EditorFrame (_("Notepad++++++++++ - untitled"), wxDefaultPosition, wxSize(1000, 500));
 	EditorWindow->Show(true);
 	SetTopWindow(EditorWindow);
 	return true;
 }
 
-BEGIN_EVENT_TABLE(EditorFrame, wxFrame) //event handlers
+BEGIN_EVENT_TABLE(EditorFrame, wxFrame) //event handlers for main window
 	EVT_MENU(MENUITEM_Exit, EditorFrame::Exit)
 	EVT_MENU(MENUITEM_Save, EditorFrame::Save)
 	EVT_MENU(MENUITEM_SaveAs, EditorFrame::SaveAs)
 	EVT_MENU(MENUITEM_Open, EditorFrame::Open)
 	EVT_MENU(MENUITEM_Clear, EditorFrame::Clear)
+	EVT_MENU(MENUITEM_About, EditorFrame::About)
 	EVT_TEXT(TEXTCTRL_Main, EditorFrame::ChangeToUnsaved)
 	EVT_CLOSE(EditorFrame::Exit)
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(EditorFrame::AboutDialogClass, wxDialog) //event handlers for about dialog
+	EVT_HYPERLINK(HYPERLINK_About, EditorFrame::AboutDialogClass::OnAboutLink)
+END_EVENT_TABLE()
+
 EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize& size): wxFrame (NULL, -1, title, pos, size) { //initialize components
 	TextBox = new wxTextCtrl (this, TEXTCTRL_Main, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_RICH);
-	MenuBar = new wxMenuBar ();
-	wxMenu *FileMenu = new wxMenu ();
+	MenuBar = new wxMenuBar;
+	FileMenu = new wxMenu;
+
 	ConfirmExitDialog = new wxMessageDialog (this, _("Do you want to save your unsaved changes?"), _("Unsaved Changes"), wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxCENTRE);
 	OpenFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	SaveFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	AboutDialog = new AboutDialogClass (_("About"), wxSize (300, 300));
 
-	//initialize menu items
-	ExitMenuItem = new wxMenuItem (FileMenu, MENUITEM_Exit, _("Exit\tCtrl-Q"), wxEmptyString);
-	SaveMenuItem = new wxMenuItem (FileMenu, MENUITEM_Save, _("Save\tCtrl-S"), wxEmptyString);
+	AboutDialogSizer = new wxBoxSizer (wxVERTICAL);
+	AboutText = new wxStaticText (AboutDialog, -1, "Notepad++++++++++\n\nBy TheWildDefender\n\nMade with wxWidgets\n\nyou need to have a really good reason to download my editor, because it's so bad", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
+	AboutText->Wrap(290);
+	AboutLink = new wxHyperlinkCtrl (AboutDialog, HYPERLINK_About, "GitHub", "https://www.github.com/TheWildDefender/Notepad-plus10");
+
+	ExitMenuItem = new wxMenuItem (FileMenu, MENUITEM_Exit, _("Exit"), wxEmptyString);
+	SaveMenuItem = new wxMenuItem (FileMenu, MENUITEM_Save, _("Save"), wxEmptyString);
 	SaveAsMenuItem = new wxMenuItem (FileMenu, MENUITEM_SaveAs, _("Save As"), wxEmptyString);
-	OpenMenuItem = new wxMenuItem (FileMenu, MENUITEM_Open, _("Open\tCtrl-O"), wxEmptyString);
-	ClearMenuItem = new wxMenuItem (FileMenu, MENUITEM_Clear, _("Clear\tCtrl-Del"), wxEmptyString);
+	OpenMenuItem = new wxMenuItem (FileMenu, MENUITEM_Open, _("Open"), wxEmptyString);
+	ClearMenuItem = new wxMenuItem (FileMenu, MENUITEM_Clear, _("Clear"), wxEmptyString);
+	AboutMenuItem = new wxMenuItem (FileMenu, MENUITEM_About, _("About"), wxEmptyString);
 
 	//set icons for menu items
 	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.xpm", wxBITMAP_TYPE_XPM));
@@ -48,10 +63,21 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 	FileMenu->Append(SaveAsMenuItem);
 	FileMenu->Append(OpenMenuItem);
 	FileMenu->Append(ClearMenuItem);
+	FileMenu->Append(AboutMenuItem);
 
 	MenuBar->Append(FileMenu, _("File"));
 	SetMenuBar(MenuBar);
+
+	//initialize "about" dialog components
+	AboutDialogSizer->Add(AboutText, 0, wxALIGN_CENTER_HORIZONTAL);
+	AboutDialogSizer->Add(AboutLink, 0, wxALIGN_CENTER_HORIZONTAL);
+	AboutDialogSizer->AddStretchSpacer();
+	AboutDialogSizer->Add(AboutDialog->CreateButtonSizer(wxOK), 0, wxALIGN_CENTER_HORIZONTAL);
+
+	AboutDialog->SetSizer(AboutDialogSizer);
 }
+
+EditorFrame::AboutDialogClass::AboutDialogClass(const wxString& title, const wxSize& size): wxDialog (EditorWindow, -1, title, wxDefaultPosition, size, wxCAPTION | wxCLOSE_BOX | wxSTAY_ON_TOP) {}
 
 void EditorFrame::Exit(wxCommandEvent& event) { //exit function for exit menu item
 	if (ConfirmExit() == true) Destroy();
@@ -62,9 +88,10 @@ void EditorFrame::Exit(wxCloseEvent& event) { //exit function for window close e
 }
 
 void EditorFrame::Save(wxCommandEvent& event) {
-	if (opened_file_name == wxString ("untitled")) SaveAs(null_event);
-	else TextBox->SaveFile(opened_file_path);
-	saved = true;
+	if (opened_file_name == wxString ("untitled")) {
+		SaveAs(null_event);
+		saved = true;
+	} else TextBox->SaveFile(opened_file_path);
 }
 
 void EditorFrame::SaveAs(wxCommandEvent& event) {
@@ -89,6 +116,16 @@ void EditorFrame::Open(wxCommandEvent& event) {
 
 void EditorFrame::Clear(wxCommandEvent& event) {
 	TextBox->Clear();
+}
+
+void EditorFrame::About(wxCommandEvent& event) {
+	AboutDialog->ShowModal();
+}
+
+void EditorFrame::AboutDialogClass::OnAboutLink(wxHyperlinkEvent& event) {
+	std::minstd_rand generator (std::chrono::system_clock::now().time_since_epoch().count());
+	if (generator() % 2 == 0) wxLaunchDefaultBrowser("https://www.github.com/TheWildDefender/Notepad-plus10");
+	else wxLaunchDefaultBrowser("https://www.youtube.com/watch?v=diNsdKmye0g");
 }
 
 void EditorFrame::ChangeToUnsaved(wxCommandEvent& event) {
