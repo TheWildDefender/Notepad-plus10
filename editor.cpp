@@ -7,9 +7,12 @@
 IMPLEMENT_APP(EditorApp)
 
 bool EditorApp::OnInit() { //create window
-	EditorWindow = new EditorFrame (_("Notepad++++++++++ - untitled"), wxDefaultPosition, wxSize(1000, 500));
+	EditorFrame *EditorWindow = new EditorFrame (_("Notepad++++++++++ - untitled"), wxDefaultPosition, wxSize(1000, 500));
 	EditorWindow->Show(true);
 	SetTopWindow(EditorWindow);
+
+	EditorWindow->AboutDialog = new EditorFrame::AboutDialogClass (EditorWindow, _("About"), wxSize (300, 300));
+
 	return true;
 }
 
@@ -36,12 +39,7 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 	ConfirmExitDialog = new wxMessageDialog (this, _("Do you want to save your unsaved changes?"), _("Unsaved Changes"), wxYES_NO | wxCANCEL | wxICON_EXCLAMATION | wxCENTRE);
 	OpenFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	SaveFileDialog = new wxFileDialog (this, wxFileSelectorPromptStr, wxEmptyString, wxEmptyString, wxFileSelectorDefaultWildcardStr, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-	AboutDialog = new AboutDialogClass (_("About"), wxSize (300, 300));
 
-	AboutDialogSizer = new wxBoxSizer (wxVERTICAL);
-	AboutText = new wxStaticText (AboutDialog, -1, "Notepad++++++++++\n\nBy TheWildDefender\n\nMade with wxWidgets\n\nyou need to have a really good reason to download my editor, because it's so bad", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
-	AboutText->Wrap(290);
-	AboutLink = new wxHyperlinkCtrl (AboutDialog, HYPERLINK_About, "GitHub", "https://www.github.com/TheWildDefender/Notepad-plus10");
 
 	ExitMenuItem = new wxMenuItem (FileMenu, MENUITEM_Exit, _("Exit"), wxEmptyString);
 	SaveMenuItem = new wxMenuItem (FileMenu, MENUITEM_Save, _("Save"), wxEmptyString);
@@ -67,17 +65,21 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 
 	MenuBar->Append(FileMenu, _("File"));
 	SetMenuBar(MenuBar);
+}
 
-	//initialize "about" dialog components
+EditorFrame::AboutDialogClass::AboutDialogClass(wxWindow* parent, const wxString& title, const wxSize& size): wxDialog (parent, -1, title, wxDefaultPosition, size, wxCAPTION | wxCLOSE_BOX | wxSTAY_ON_TOP) { //initialize about dialog
+	AboutDialogSizer = new wxBoxSizer (wxVERTICAL);
+	AboutText = new wxStaticText (this, -1, "Notepad++++++++++\n\nBy TheWildDefender\n\nMade with wxWidgets\n\nyou need to have a really good reason to download my editor, because it's so bad", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
+	AboutText->Wrap(290);
+	AboutLink = new wxHyperlinkCtrl (this, HYPERLINK_About, "GitHub", "https://www.github.com/TheWildDefender/Notepad-plus10");
+
 	AboutDialogSizer->Add(AboutText, 0, wxALIGN_CENTER_HORIZONTAL);
 	AboutDialogSizer->Add(AboutLink, 0, wxALIGN_CENTER_HORIZONTAL);
 	AboutDialogSizer->AddStretchSpacer();
-	AboutDialogSizer->Add(AboutDialog->CreateButtonSizer(wxOK), 0, wxALIGN_CENTER_HORIZONTAL);
+	AboutDialogSizer->Add(this->CreateButtonSizer(wxOK), 0, wxALIGN_CENTER_HORIZONTAL);
 
-	AboutDialog->SetSizer(AboutDialogSizer);
+	this->SetSizer(AboutDialogSizer);
 }
-
-EditorFrame::AboutDialogClass::AboutDialogClass(const wxString& title, const wxSize& size): wxDialog (EditorWindow, -1, title, wxDefaultPosition, size, wxCAPTION | wxCLOSE_BOX | wxSTAY_ON_TOP) {}
 
 void EditorFrame::Exit(wxCommandEvent& event) { //exit function for exit menu item
 	if (ConfirmExit() == true) Destroy();

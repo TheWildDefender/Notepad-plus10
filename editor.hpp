@@ -9,7 +9,12 @@ class EditorFrame: public wxFrame {
 
 		class AboutDialogClass: public wxDialog {
 			public:
-				AboutDialogClass(const wxString& title, const wxSize& size);
+				AboutDialogClass(wxWindow* parent, const wxString& title, const wxSize& size);
+
+				wxBoxSizer *AboutDialogSizer;
+				wxStaticText *AboutText;
+				wxHyperlinkCtrl *AboutLink;
+
 				void OnAboutLink(wxHyperlinkEvent& event);
 
 				DECLARE_EVENT_TABLE()
@@ -23,10 +28,6 @@ class EditorFrame: public wxFrame {
 		wxFileDialog *SaveFileDialog;
 		wxFileDialog *OpenFileDialog;
 		AboutDialogClass *AboutDialog;
-
-		wxBoxSizer *AboutDialogSizer;
-		wxStaticText *AboutText;
-		wxHyperlinkCtrl *AboutLink;
 
 		wxMenuItem *ExitMenuItem;
 		wxMenuItem *SaveMenuItem;
@@ -59,7 +60,6 @@ enum { //ids for components
 	HYPERLINK_About
 };
 
-EditorFrame *EditorWindow;
 bool saved = true; //states whether the user has unsaved changes or not
 bool close_app; //used in confirming exit; states whether editor should close or not
 int dialog_input; //stores what button the user clicked in save file dialog
