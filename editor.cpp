@@ -27,7 +27,7 @@ BEGIN_EVENT_TABLE(EditorFrame, wxFrame) //event handlers for main window
 	EVT_CLOSE(EditorFrame::Exit)
 END_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(EditorFrame::AboutDialogClass, wxDialog) //event handlers for about dialog
+BEGIN_EVENT_TABLE(EditorFrame::AboutDialogClass, wxDialog) //event handlers (handler, maybe?) for about dialog
 	EVT_HYPERLINK(HYPERLINK_About, EditorFrame::AboutDialogClass::OnAboutLink)
 END_EVENT_TABLE()
 
