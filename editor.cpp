@@ -49,11 +49,11 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 	AboutMenuItem = new wxMenuItem (FileMenu, MENUITEM_About, _("About"), wxEmptyString);
 
 	//set icons for menu items
-	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.xpm", wxBITMAP_TYPE_XPM));
-	SaveMenuItem->SetBitmap(wxBitmap ("icons/filesave.xpm", wxBITMAP_TYPE_XPM));
-	SaveAsMenuItem->SetBitmap(wxBitmap ("icons/filesaveas.xpm", wxBITMAP_TYPE_XPM));
-	OpenMenuItem->SetBitmap(wxBitmap ("icons/fileopen.xpm", wxBITMAP_TYPE_XPM));
-	ClearMenuItem->SetBitmap(wxBitmap ("icons/delete.xpm", wxBITMAP_TYPE_XPM));
+	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.png", wxBITMAP_TYPE_PNG));
+	SaveMenuItem->SetBitmap(wxBitmap ("icons/filesave.png", wxBITMAP_TYPE_PNG));
+	SaveAsMenuItem->SetBitmap(wxBitmap ("icons/filesaveas.png", wxBITMAP_TYPE_PNG));
+	OpenMenuItem->SetBitmap(wxBitmap ("icons/fileopen.png", wxBITMAP_TYPE_PNG));
+	ClearMenuItem->SetBitmap(wxBitmap ("icons/delete.png", wxBITMAP_TYPE_PNG));
 
 	//add menu items to menu
 	FileMenu->Append(ExitMenuItem);
@@ -73,6 +73,7 @@ EditorFrame::AboutDialogClass::AboutDialogClass(wxWindow* parent, const wxString
 	AboutText->Wrap(280);
 	AboutLink = new wxHyperlinkCtrl (this, HYPERLINK_About, "GitHub", "https://www.github.com/TheWildDefender/Notepad-plus10");
 
+	AboutDialogSizer->AddSpacer(10);
 	AboutDialogSizer->Add(AboutText, 0, wxALIGN_CENTER_HORIZONTAL);
 	AboutDialogSizer->Add(AboutLink, 0, wxALIGN_CENTER_HORIZONTAL);
 	AboutDialogSizer->AddStretchSpacer();
