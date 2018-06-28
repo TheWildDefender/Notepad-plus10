@@ -70,13 +70,14 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 EditorFrame::AboutDialogClass::AboutDialogClass(wxWindow* parent, const wxString& title, const wxSize& size): wxDialog (parent, -1, title, wxDefaultPosition, size, wxCAPTION | wxCLOSE_BOX | wxSTAY_ON_TOP) { //initialize about dialog
 	AboutDialogSizer = new wxBoxSizer (wxVERTICAL);
 	AboutText = new wxStaticText (this, -1, "Notepad++++++++++\n\nBy TheWildDefender\n\nMade with wxWidgets\n\nyou need to have a really good reason to download my editor, because it's so bad", wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL);
-	AboutText->Wrap(290);
+	AboutText->Wrap(280);
 	AboutLink = new wxHyperlinkCtrl (this, HYPERLINK_About, "GitHub", "https://www.github.com/TheWildDefender/Notepad-plus10");
 
 	AboutDialogSizer->Add(AboutText, 0, wxALIGN_CENTER_HORIZONTAL);
 	AboutDialogSizer->Add(AboutLink, 0, wxALIGN_CENTER_HORIZONTAL);
 	AboutDialogSizer->AddStretchSpacer();
 	AboutDialogSizer->Add(this->CreateButtonSizer(wxOK), 0, wxALIGN_CENTER_HORIZONTAL);
+	AboutDialogSizer->AddSpacer(10);
 
 	this->SetSizer(AboutDialogSizer);
 }
