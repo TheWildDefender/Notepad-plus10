@@ -7,6 +7,8 @@
 IMPLEMENT_APP(EditorApp)
 
 bool EditorApp::OnInit() { //create window
+	wxInitAllImageHandlers();
+
 	EditorFrame *EditorWindow = new EditorFrame (_("Notepad++++++++++ - untitled"), wxDefaultPosition, wxSize(1000, 500));
 	EditorWindow->Show(true);
 	SetTopWindow(EditorWindow);
@@ -49,20 +51,11 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 	AboutMenuItem = new wxMenuItem (FileMenu, MENUITEM_About, _("About"), wxEmptyString);
 
 	//set icons for menu items
-#ifdef __linux__
 	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.xpm", wxBITMAP_TYPE_XPM));
 	SaveMenuItem->SetBitmap(wxBitmap ("icons/filesave.xpm", wxBITMAP_TYPE_XPM));
 	SaveAsMenuItem->SetBitmap(wxBitmap ("icons/filesaveas.xpm", wxBITMAP_TYPE_XPM));
 	OpenMenuItem->SetBitmap(wxBitmap ("icons/fileopen.xpm", wxBITMAP_TYPE_XPM));
 	ClearMenuItem->SetBitmap(wxBitmap ("icons/delete.xpm", wxBITMAP_TYPE_XPM));
-#endif
-#ifdef _WIN32
-	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.ico", wxBITMAP_TYPE_ICO));
-	SaveMenuItem->SetBitmap(wxBitmap ("icons/filesave.ico", wxBITMAP_TYPE_ICO));
-	SaveAsMenuItem->SetBitmap(wxBitmap ("icons/filesaveas.ico", wxBITMAP_TYPE_ICO));
-	OpenMenuItem->SetBitmap(wxBitmap ("icons/fileopen.ico", wxBITMAP_TYPE_ICO));
-	ClearMenuItem->SetBitmap(wxBitmap ("icons/delete.ico", wxBITMAP_TYPE_ICO));
-#endif
 
 	//add menu items to menu
 	FileMenu->Append(ExitMenuItem);
