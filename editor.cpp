@@ -49,11 +49,20 @@ EditorFrame::EditorFrame(const wxString& title, const wxPoint& pos, const wxSize
 	AboutMenuItem = new wxMenuItem (FileMenu, MENUITEM_About, _("About"), wxEmptyString);
 
 	//set icons for menu items
-	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.png", wxBITMAP_TYPE_PNG));
-	SaveMenuItem->SetBitmap(wxBitmap ("icons/filesave.png", wxBITMAP_TYPE_PNG));
-	SaveAsMenuItem->SetBitmap(wxBitmap ("icons/filesaveas.png", wxBITMAP_TYPE_PNG));
-	OpenMenuItem->SetBitmap(wxBitmap ("icons/fileopen.png", wxBITMAP_TYPE_PNG));
-	ClearMenuItem->SetBitmap(wxBitmap ("icons/delete.png", wxBITMAP_TYPE_PNG));
+#ifdef __linux__
+	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.xpm", wxBITMAP_TYPE_XPM));
+	SaveMenuItem->SetBitmap(wxBitmap ("icons/filesave.xpm", wxBITMAP_TYPE_XPM));
+	SaveAsMenuItem->SetBitmap(wxBitmap ("icons/filesaveas.xpm", wxBITMAP_TYPE_XPM));
+	OpenMenuItem->SetBitmap(wxBitmap ("icons/fileopen.xpm", wxBITMAP_TYPE_XPM));
+	ClearMenuItem->SetBitmap(wxBitmap ("icons/delete.xpm", wxBITMAP_TYPE_XPM));
+#endif
+#ifdef _WIN32
+	ExitMenuItem->SetBitmap(wxBitmap ("icons/quit.ico", wxBITMAP_TYPE_ICO));
+	SaveMenuItem->SetBitmap(wxBitmap ("icons/filesave.ico", wxBITMAP_TYPE_ICO));
+	SaveAsMenuItem->SetBitmap(wxBitmap ("icons/filesaveas.ico", wxBITMAP_TYPE_ICO));
+	OpenMenuItem->SetBitmap(wxBitmap ("icons/fileopen.ico", wxBITMAP_TYPE_ICO));
+	ClearMenuItem->SetBitmap(wxBitmap ("icons/delete.ico", wxBITMAP_TYPE_ICO));
+#endif
 
 	//add menu items to menu
 	FileMenu->Append(ExitMenuItem);
